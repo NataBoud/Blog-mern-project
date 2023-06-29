@@ -10,4 +10,7 @@ export const store = configureStore({
         comment: commentSlice,
         
     },
+    middleware: getDefaultMiddleware => 
+        getDefaultMiddleware(),
+    devTools: false
 })
