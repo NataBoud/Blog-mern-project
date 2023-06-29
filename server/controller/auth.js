@@ -1,4 +1,4 @@
-import User from '../models/user.js'
+import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
@@ -42,7 +42,7 @@ export const register = async(req, res) => {
         })
 
     } catch (error) {
-        res.json({message: "Erreur lors de la création de l'utilisateur"})
+        res.json({message: "Erreur lors de la création de l'utilisateur."})
     }
 }
 
@@ -54,7 +54,7 @@ export const login = async(req, res) => {
 
         if(!user) {
             return res.json({
-                message: "L'utilisateur n'existe pas"
+                message: "L'utilisateur n'existe pas."
             })
         }
 
@@ -62,7 +62,7 @@ export const login = async(req, res) => {
 
         if(!isPasswordCorrect) {
             return res.json({
-                message: 'Mot de passe incorrect'
+                message: 'Mot de passe incorrect. Essayez à nouveau.'
             })
         }
 
@@ -77,13 +77,13 @@ export const login = async(req, res) => {
         res.json({
             token,
             user,
-            message: 'Vous êtes connecté(e)'
+            message: 'Vous êtes connecté(e).'
         })
 
 
 
     } catch (error) {
-        res.json({message: "Erreur d'identification"})
+        res.json({message: "Erreur d'identification."})
     }
 }
 

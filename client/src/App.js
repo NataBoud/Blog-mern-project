@@ -9,10 +9,19 @@ import { RegisterPage } from './pages/RegisterPage'
 import { LoginPage } from './pages/LoginPage'
 import { EditPostPage } from './pages/EditPostPage'
 import { ToastContainer } from 'react-toastify' // обработка ошибок
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
+import { useDispatch } from 'react-redux' // dispatch - отправка
+import { useEffect } from 'react'
+import { getMe } from './redux/features/auth/authSlice.js'
 
 
 function App() {
+    const dispatch = useDispatch()
+    // берем useDispatch и на каждое обновл стр, при перв обновлении мы будем dispatch - отправлять getMe
+    useEffect(() => {
+      dispatch(getMe())
+    }, [dispatch])
+
     return (
       <Layout>
         <Routes>

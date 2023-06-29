@@ -1,21 +1,25 @@
 import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerUser } from '../redux/features/auth/authSlice'
+import { registerUser, checkIsAuth } from '../redux/features/auth/authSlice'
 // импорт компонент toast
 import { toast } from 'react-toastify'
+
 
 export const RegisterPage = () => {
 
     const [username, setUsername] = useState('') // onChange={e => setUserName(e.target.value)} 
     const [password, setPassword] = useState('') // value из инпута и записываем его в useState('')
     const {status} = useSelector((state) => state.auth)
+    const isAuth = useSelector(checkIsAuth) // проверка если мы в сети...
+    const navigate = useNavigate()    
     
     const dispatch = useDispatch() // dispatch-отправка, перераспределение
 
     useEffect(() => {
         if(status) { toast(status) }
-    }, [status])
+        if(isAuth) navigate('/')
+    }, [status, isAuth, navigate])
 
     // handle submit - обработчик отправки // берем handleSubmit и вешаем на кнопку подтвердить
     const handleSubmit = () =>{

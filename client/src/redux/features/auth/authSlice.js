@@ -22,7 +22,7 @@ export const registerUser = createAsyncThunk(
             }// (токен, как дата.токен)           
             return data
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     }
 )
@@ -51,18 +51,25 @@ export const getMe = createAsyncThunk('auth/loginUser', async () => {
             const { data } = await axios.get('/auth/me')                
             return data
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     })
 
-// теперь нужно этот (reduser => registerUser) => зарегестрировать =>
+// теперь нужно этот (reduser(преобр данных) => registerUser) => зарегестрировать =>
 // => для этого мы идем в authSlice => extraReducers => это объект, 
 // где мы можем управлять (initialState - нашим состоянием) 
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {},
+    reducers: { //после нажатия кнопки выйти нам нужно все чистить
+        logout: (state) => {
+            state.user = null
+            state.token = null
+            state.isLoading = false
+            state.status = null
+        }
+    },
     extraReducers: {
         
 
@@ -105,8 +112,31 @@ export const authSlice = createSlice({
             state.status = action.payload.message
             state.isLoading = false
         },
-    
+
+        //--- (getMe) login check ---//
+
+        [getMe.pending]: (state) => {
+            state.isLoading = true
+            state.status = null
+        },
+        [getMe.fulfilled]: (state, action) => {
+            state.isLoading = false // загрузка закончилась
+            state.status = null // toastify не ставим запрос делается каждый раз при обновлении стр
+            state.user = action.payload?.user // If a user exists
+            state.token = action.payload?.token // If a user exists
+            
+        },
+        [getMe.rejectWithValue]: (state, action) => {
+            state.status = action.payload.message
+            state.isLoading = false
+        },
     }
 })
 
+// создаем переменную при помощи которой делаем check = принимаем state =>
+export const checkIsAuth = state => Boolean(state.auth.token)
+
+// после нажатия кнопки выйти нам нужно все чистить
+
+export const { logout } = authSlice.actions
 export default authSlice.reducer
